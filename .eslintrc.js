@@ -49,6 +49,10 @@ module.exports = {
 				'n8n-nodes-base/node-execute-block-missing-continue-on-fail': 'off',
 				'n8n-nodes-base/node-resource-description-filename-against-convention': 'off',
 				'n8n-nodes-base/node-param-fixed-collection-type-unsorted-items': 'off',
+				// Aligned with @n8n/scan-community-package: it uses NodeConnectionTypes.Main
+				// (an enum) rather than the "main" string literal, and disables these rules.
+				'n8n-nodes-base/node-class-description-inputs-wrong-regular-node': 'off',
+				'n8n-nodes-base/node-class-description-outputs-wrong': 'off',
 			},
 		},
 	],

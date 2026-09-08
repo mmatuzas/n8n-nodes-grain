@@ -5,9 +5,13 @@ import type {
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeOperationError } from 'n8n-workflow';
+import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
-import { grainApiRequest, grainApiRequestAllItems } from './GenericFunctions';
+import {
+	grainApiRequest,
+	grainApiRequestAllItems,
+	grainApiRequestText,
+} from './GenericFunctions';
 
 const INCLUDE_OPTIONS = [
 	{ name: 'AI Action Items', value: 'ai_action_items' },
@@ -22,16 +26,17 @@ export class Grain implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Grain',
 		name: 'grain',
-		icon: 'file:grain.svg',
+		icon: { light: 'file:grain.svg', dark: 'file:grain.dark.svg' },
 		group: ['input'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Work with Grain recordings, transcripts, users and teams',
+		usableAsTool: true,
 		defaults: {
 			name: 'Grain',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'grainApi',
@@ -353,14 +358,11 @@ export class Grain implements INodeType {
 								`/_/public-api/v2/recordings/${recordingId}/transcript`,
 							)) as IDataObject;
 						} else {
-							const text = (await grainApiRequest.call(
+							const text = await grainApiRequestText.call(
 								this,
 								'GET',
 								`/_/public-api/v2/recordings/${recordingId}/transcript.${format}`,
-								{},
-								{},
-								{ json: false },
-							)) as string;
+							);
 							responseData = { format, transcript: text };
 						}
 					} else if (operation === 'update') {
@@ -456,7 +458,7 @@ export class Grain implements INodeType {
 					});
 					continue;
 				}
-				throw error;
+				throw new NodeOperationError(this.getNode(), error as Error, { itemIndex: i });
 			}
 		}
 

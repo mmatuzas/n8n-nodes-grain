@@ -6,13 +6,15 @@ import type {
 	IWebhookFunctions,
 	IWebhookResponseData,
 } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
+
 import { grainApiRequest } from './GenericFunctions';
 
 export class GrainTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Grain Trigger',
 		name: 'grainTrigger',
-		icon: 'file:grain.svg',
+		icon: { light: 'file:grain.svg', dark: 'file:grain.dark.svg' },
 		group: ['trigger'],
 		version: 1,
 		subtitle: '={{$parameter["events"].join(", ")}}',
@@ -21,7 +23,7 @@ export class GrainTrigger implements INodeType {
 			name: 'Grain Trigger',
 		},
 		inputs: [],
-		outputs: ['main'],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'grainApi',

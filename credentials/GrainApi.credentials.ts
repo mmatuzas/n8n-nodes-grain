@@ -1,5 +1,6 @@
 import type {
 	IAuthenticateGeneric,
+	Icon,
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
@@ -11,6 +12,8 @@ export class GrainApi implements ICredentialType {
 	displayName = 'Grain API';
 
 	documentationUrl = 'https://developers.grain.com/';
+
+	icon: Icon = { light: 'file:grain.svg', dark: 'file:grain.dark.svg' };
 
 	properties: INodeProperties[] = [
 		{

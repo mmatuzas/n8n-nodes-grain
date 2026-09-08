@@ -54,6 +54,17 @@ export async function grainApiRequest(
 }
 
 /**
+ * Fetch a plain-text endpoint (e.g. transcript.txt/.vtt/.srt) as a raw string.
+ */
+export async function grainApiRequestText(
+	this: GrainRequestContext,
+	method: IHttpRequestMethods,
+	resource: string,
+): Promise<string> {
+	return (await grainApiRequest.call(this, method, resource, {}, {}, { json: false })) as string;
+}
+
+/**
  * Walk Grain's cursor-based pagination and collect every item under `propertyName`.
  */
 export async function grainApiRequestAllItems(
