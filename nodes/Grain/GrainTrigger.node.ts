@@ -130,6 +130,14 @@ export class GrainTrigger implements INodeType {
 					try {
 						await grainApiRequest.call(this, 'DELETE', `/_/public-api/v2/hooks/${hookId}`);
 					} catch (error) {
+						// Deliberate: attempt every hook deletion before reporting failure, so one
+						// unreachable hook does not leave the remaining ones registered in Grain.
+						// Each failure is logged so the operator can clean it up manually.
+						this.logger.error(`Grain Trigger: failed to delete hook ${hookId}`, {
+							hookId,
+							node: this.getNode().name,
+							error: error as Error,
+						});
 						success = false;
 					}
 				}
